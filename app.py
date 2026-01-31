@@ -106,7 +106,7 @@ def show_hud_message(placeholder, emoji, message, subtext=""):
 
 # --- 4. APP LOGIC ---
 
-st.title("🔮 Crystal Clear OCR")
+st.title("OCR KITCHEN👨‍🍳")
 st.markdown("### *Transforming images into words...*")
 
 uploaded_file = st.file_uploader(" ", type=["pdf"])
