@@ -8,7 +8,7 @@ import random
 import base64
 
 # --- 1. PAGE CONFIG ---
-st.set_page_config(page_title="Ultra OCR", page_icon="🔮", layout="centered")
+st.set_page_config(page_title="OCR Kitchen", page_icon="👨‍🍳", layout="centered")
 
 # --- 2. ADVANCED CSS (ANIMATIONS & GLASSMORPHISM) ---
 st.markdown("""
