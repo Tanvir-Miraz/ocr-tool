@@ -7,8 +7,14 @@ import time
 import random
 import base64
 
-# --- 1. PAGE CONFIG ---
-st.set_page_config(page_title="OCR Kitchen", page_icon="👨‍🍳", layout="centered")
+# --- 1. PAGE CONFIG & LOGO LOADING ---
+# We load the image first so we can use it in the browser tab icon
+try:
+    logo_img = Image.open("logo.png")
+    st.set_page_config(page_title="Ultra OCR", page_icon=logo_img, layout="centered")
+except:
+    # Fallback if logo.png is missing from your GitHub
+    st.set_page_config(page_title="Ultra OCR", page_icon="🔮", layout="centered")
 
 # --- 2. ADVANCED CSS (ANIMATIONS & GLASSMORPHISM) ---
 st.markdown("""
@@ -61,10 +67,10 @@ st.markdown("""
         to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
     }
 
-    /* FLOATING BUTTONS */
+    /* FLOATING BUTTONS - Change to Red Theme to match logo */
     div.stButton > button {
         width: 100%;
-        background: linear-gradient(90deg, #1CB5E0 0%, #000851 100%);
+        background: linear-gradient(90deg, #F03E3E 0%, #8b0000 100%);
         color: white;
         border: none;
         padding: 18px 32px;
@@ -81,7 +87,7 @@ st.markdown("""
 
     /* PROGRESS BAR COLOR */
     .stProgress > div > div > div > div {
-        background-color: #e73c7e;
+        background-color: #F03E3E;
     }
     
     /* HIDE DEFAULT STREAMLIT MENU */
@@ -106,7 +112,17 @@ def show_hud_message(placeholder, emoji, message, subtext=""):
 
 # --- 4. APP LOGIC ---
 
-st.title("OCR KITCHEN👨‍🍳")
+# DISPLAY LOGO IN SIDEBAR AND MAIN HEADER
+if 'logo_img' in locals():
+    st.sidebar.image(logo_img, width=150)
+    col1, col2 = st.columns([1, 4])
+    with col1:
+        st.image(logo_img, width=80)
+    with col2:
+        st.title("Crystal Clear OCR")
+else:
+    st.title("OCR KITCHEN👨‍🍳")
+
 st.markdown("### *Transforming images into words...*")
 
 uploaded_file = st.file_uploader(" ", type=["pdf"])
@@ -151,11 +167,9 @@ if uploaded_file is not None:
             if i % 2 == 0 or i == 0:
                 # Pick a random lively message
                 emoji, main_text, sub_text = random.choice(loading_steps)
-                # Update the specific page number in subtext for realism
                 real_sub_text = f"{sub_text} (Page {i+1})"
                 show_hud_message(hud_placeholder, emoji, main_text, real_sub_text)
                 
-                # Small delay so user can see the beautiful pop-up
                 time.sleep(0.3)
 
             # OCR Extraction
@@ -173,20 +187,10 @@ if uploaded_file is not None:
         show_hud_message(hud_placeholder, "🎉", "MISSION COMPLETE", "Your text is served.")
         st.balloons()
         time.sleep(2)
-        hud_placeholder.empty() # Clear the HUD so they can see the download button
+        hud_placeholder.empty()
 
         # 4. DOWNLOAD CARD
         st.success("✅ Extraction successful!")
-        
-        st.markdown("""
-        <style>
-        div.stDownloadButton > button {
-            background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%);
-            color: white;
-            font-weight: bold;
-        }
-        </style>
-        """, unsafe_allow_html=True)
         
         st.download_button(
             label="⬇️ DOWNLOAD TEXT FILE",
